@@ -1,3 +1,16 @@
 from django.db import models
 
-# Create your models here.
+class Student(models.Model):
+    first_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128)
+    faculty = models.CharField(max_length=256)
+    group_name = models.CharField(max_length=64)
+    theme_name = models.TextField()
+    years = models.CharField(max_length=32)
+    files = models.FileField(upload_to='student_files/')
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.theme_name}  - {self.years}"
+    
+
+
