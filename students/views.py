@@ -16,3 +16,22 @@ def add_student(request: HttpRequest) -> HttpResponse:
         new_student.save()
         return redirect("list_students")
     return render(request, "add_table.html")
+
+def list_students(request: HttpRequest) -> HttpResponse:
+    students = Student.objects.all().order_by('-id')
+
+    faculty = request.GET.get("faculty")
+    group_name = request.GET.get("group_name")
+    theme_name = request.GET.get("theme_name")
+    years = request.GET.get("years")
+
+    if faculty:
+        students = students.filter(faculty__icontains=faculty)
+    if group_name:
+        students = students.filter(group_name__icontains=group_name)
+    if theme_name:
+        students = students.filter(theme_name__icontains=theme_name)
+    if years:
+        students = students.filter(years__icontains=years)
+
+    return render(request, "table_list.html", {"students": students})
