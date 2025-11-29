@@ -118,6 +118,9 @@ class AddTableView(View):
         return render(request, "add_table.html")
     
     def post(self, request: HttpRequest) -> HttpResponse:
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return JsonResponse({"message":"login not defound"})
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         faculty = request.POST.get("faculty")

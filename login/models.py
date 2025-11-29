@@ -11,9 +11,13 @@ class Registration(models.Model):
         return f"{self.id}. {self.name}"
 
 class Student(models.Model):
+    choises = (
+        ("Kompyuter_inginiringi", "Kompyuter_inginiringi"),
+        ("Axborot_texnologiyalar", "Axborot_texnologiyalar")
+    )
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
-    faculty = models.CharField(max_length=256)
+    faculty = models.CharField(choices=choises)
     group_name = models.CharField(max_length=64)
     theme_name = models.TextField()
     years = models.CharField(max_length=32)
