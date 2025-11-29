@@ -3,9 +3,19 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
 from random import randint
 
 from .models import Registration, Student
+
+
+class Kirish(View):
+    def get(self, request:HttpRequest)->HttpResponse:
+        return render(request=request, template_name="index.html")
+    
+class Login(View):
+    def get(self,request:HttpRequest)->HttpResponse:
+        return render(request=request, template_name="login_page.html")
 
 
 class Register(View):
@@ -103,6 +113,39 @@ class VerifyEmail(View):
                 del request.session[key]
 
         return redirect("table")
+    
+
+class Login(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(request, "login_page.html")
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        if not email:
+            return JsonResponse({"message": "email required"})
+        
+
+        if not Registration.objects.filter(email=email).exists():
+            return JsonResponse({"message": "email not found"})
+
+        if not password:
+            return JsonResponse({"message": "password required"})
+
+        if len(password) > 256:
+            return JsonResponse({"message": "max 256 characters"})
+
+        base_user = Registration.objects.get(email=email)
+
+        if not check_password(password, base_user.password):
+            return JsonResponse({"message": "incorrect password"})
+
+
+        request.session['user_id'] = base_user.id
+
+        return redirect("table")
+
     
 class TableView(View):
     def get(self, request: HttpRequest) -> HttpResponse:

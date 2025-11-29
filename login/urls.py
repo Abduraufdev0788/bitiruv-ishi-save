@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import Register, TableView, VerifyEmail, AddTableView
+from .views import Login, Register, TableView, VerifyEmail, AddTableView, Kirish
 
-from django.conf import settings
-from django.conf.urls.static import static
+
 
 urlpatterns = [
+    path("", Kirish.as_view(), name="kirish"),
+    path("login/", Login.as_view(), name="login"),
     path("register/", Register.as_view(), name="register"),
     path("verify/", VerifyEmail.as_view(), name="verify"),
     path("table/", TableView.as_view(), name="table"),
