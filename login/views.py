@@ -1,11 +1,11 @@
 from django.views import View
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from random import randint
 
-from .models import Registration
+from .models import Registration, Student
 
 
 class Register(View):
@@ -32,6 +32,8 @@ class Register(View):
 
         if not email:
             return JsonResponse({"message": "email required"}, status=401)
+        if Registration.objects.filter(email=email).exists():
+            return JsonResponse({"message": "email already exists"}, status=401)
 
         if not password:
             return JsonResponse({"message": "password required"}, status=401)
@@ -59,7 +61,7 @@ class Register(View):
         request.session['verification_code'] = verification_code
 
 
-        return render(request, "verify.html")
+        return redirect("verify")
     
 
 class VerifyEmail(View):
@@ -67,11 +69,18 @@ class VerifyEmail(View):
         return render(request, "verify.html")
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        input_code = request.POST.get("code")
+        d1 = request.POST.get("d1")
+        d2 = request.POST.get("d2")
+        d3 = request.POST.get("d3")
+        d4 = request.POST.get("d4")
+        d5 = request.POST.get("d5")
+        d6 = request.POST.get("d6")
+        input_code = f"{d1}{d2}{d3}{d4}{d5}{d6}"
         session_code = str(request.session.get("verification_code"))
+        print((input_code, session_code))
 
         if input_code != session_code:
-            return render(request, "verify.html", {"error": "Kod notogri!"})
+            return JsonResponse({"error": "Kod notogri!"}, status=401)
 
 
         name = request.session.get("name")
@@ -93,4 +102,39 @@ class VerifyEmail(View):
             if key in request.session:
                 del request.session[key]
 
-        return render(request, "login.html")
+        return redirect("table")
+    
+class TableView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return JsonResponse({"message":"login not defound"})
+            
+        students = Student.objects.all()
+        return render(request, "table_list.html", {"students": students})
+    
+class AddTableView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(request, "add_table.html")
+    
+    def post(self, request: HttpRequest) -> HttpResponse:
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        faculty = request.POST.get("faculty")
+        group_name = request.POST.get("group_name")
+        theme_name = request.POST.get("theme_name")
+        years = request.POST.get("years")
+        files = request.FILES.get("files")
+
+        Student.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            faculty=faculty,
+            group_name=group_name,
+            theme_name=theme_name,
+            years=years,
+            files=files
+        )
+
+        return redirect("table")
+    

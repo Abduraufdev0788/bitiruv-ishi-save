@@ -99,7 +99,7 @@
         <h2>Tasdiqlash Kodingiz</h2>
         <p>Iltimos emailga yuborilgan 6 xonali kodni kiriting.</p>
 
-        <form action="/verify/" method="POST">
+        <form action="{% url 'verify' %}" method="POST">
             {% csrf_token %}
 
             <div class="otp-inputs">
