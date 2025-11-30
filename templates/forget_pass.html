@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parolni Tiklash</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f2f4ff;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: white;
+            width: 380px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2d5be5;
+        }
+
+        label {
+            font-size: 14px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-top: 6px;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            background: #2d5be5;
+            border: none;
+            padding: 13px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #1c3ebd;
+        }
+
+        .info {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>Parolni Tiklash</h2>
+
+        <form action="{% url 'forgot_password' %}" method="POST">
+            {% csrf_token %}
+            <label>Email manzilingiz:</label>
+            <input type="email" name="email" placeholder="example@gmail.com" required>
+
+            <button type="submit">Kodni yuborish</button>
+        </form>
+
+        <div class="info">
+            Parolni tiklash uchun emailingizga kod yuboramiz.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

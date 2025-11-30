@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kodni Tasdiqlash</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f0f4ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .verify-container {
+            background: white;
+            width: 400px;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 26px;
+            color: #2d5be5;
+        }
+
+        p {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .otp-inputs input {
+            width: 55px;
+            height: 55px;
+            font-size: 22px;
+            text-align: center;
+            border: 2px solid #ccd6ff;
+            border-radius: 10px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .otp-inputs input:focus {
+            border-color: #2d5be5;
+            box-shadow: 0 0 8px rgba(45, 91, 229, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #2d5be5;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #1a3eb3;
+        }
+
+        .resend {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .resend a {
+            text-decoration: none;
+            color: #2d5be5;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="verify-container">
+        <h2>Tasdiqlash Kodingiz</h2>
+        <p>Iltimos emailga yuborilgan 6 xonali kodni kiriting.</p>
+
+        <form action="{% url 'sendcode' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="otp-inputs">
+                <input type="text" maxlength="1" name="d1" required>
+                <input type="text" maxlength="1" name="d2" required>
+                <input type="text" maxlength="1" name="d3" required>
+                <input type="text" maxlength="1" name="d4" required>
+                <input type="text" maxlength="1" name="d5" required>
+                <input type="text" maxlength="1" name="d6" required>
+            </div>
+
+            <button type="submit">Tasdiqlash</button>
+
+        </form>
+
+        <div class="resend">
+            Kod kelmadimi? <a href="/resend/">Qayta yuborish</a>
+        </div>
+    </div>
+
+
+    <script>
+        // OTP avtomatik o'tish
+        const inputs = document.querySelectorAll(".otp-inputs input");
+
+        inputs.forEach((input, index) => {
+            input.addEventListener("input", () => {
+                if (input.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace" && index > 0 && input.value === "") {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

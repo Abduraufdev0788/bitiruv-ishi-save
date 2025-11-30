@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yangi Parol</title>
+    <style>
+        body { margin:0; padding:0; background:#f4f7ff; font-family:Arial; }
+        .container { height:100vh; display:flex; justify-content:center; align-items:center; }
+        .card {
+            width:360px;
+            background:white;
+            padding:30px;
+            border-radius:16px;
+            box-shadow:0 5px 20px rgba(0,0,0,0.1);
+        }
+        h2 { text-align:center; color:#2d5be5; margin-bottom:20px; }
+
+        label { font-size:14px; }
+        input {
+            width:100%; padding:12px; border:1px solid #ccc;
+            border-radius:10px; margin-bottom:15px;
+        }
+        button {
+            width:100%; padding:12px; border:none; border-radius:10px;
+            background:#2d5be5; color:white; cursor:pointer; font-size:16px;
+        }
+        button:hover { background:#163bbd; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>Yangi Parol O‘rnating</h2>
+
+        <form action="{% url 'update_password' %}" method="POST">
+            {% csrf_token %}
+
+            <label>Yangi parol</label>
+            <input type="password" name="password" required>
+
+            <label>Parolni tasdiqlash</label>
+            <input type="password" name="confirm_password" required>
+
+            <button type="submit">Saqlash</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

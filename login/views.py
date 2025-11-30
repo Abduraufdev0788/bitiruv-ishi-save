@@ -87,7 +87,6 @@ class VerifyEmail(View):
         d6 = request.POST.get("d6")
         input_code = f"{d1}{d2}{d3}{d4}{d5}{d6}"
         session_code = str(request.session.get("verification_code"))
-        print((input_code, session_code))
 
         if input_code != session_code:
             return JsonResponse({"error": "Kod notogri!"}, status=401)
@@ -145,6 +144,94 @@ class Login(View):
         request.session['user_id'] = base_user.id
 
         return redirect("table")
+    
+
+
+class Forgot_password(View):
+    def get(self, request:HttpRequest)->HttpResponse:
+        return render(request=request, template_name="forget_pass.html")
+    
+    def post(self,request: HttpRequest)-> HttpResponse:
+        email = request.POST.get("email")
+
+        if not email:
+            return JsonResponse({"message":"email required"}, status = 401)
+        if not Registration.objects.filter(email=email).exists:
+            return JsonResponse({"message":"email not found"}, status = 404)
+        
+        verification_code = randint(100000, 999999)
+        send_mail(
+            subject="Verification Code",
+            message=f"Your verification code is {verification_code}",
+            from_email="turkeynumber063@gmail.com",
+            recipient_list=[email],
+            fail_silently=False,
+        )
+        request.session['code'] = verification_code
+        request.session['email'] = email
+
+        return redirect("sendcode")
+
+class SendCode(View):
+    def get(self, request: HttpRequest)->HttpResponse:
+        return render(request=request, template_name="reset_code.html")
+    
+    def post(self, request: HttpRequest) -> HttpResponse:
+        email = request.session.get("email")
+        if not email:
+            return JsonResponse({"message":"login not found"}, status = 401)
+        d1 = request.POST.get("d1")
+        d2 = request.POST.get("d2")
+        d3 = request.POST.get("d3")
+        d4 = request.POST.get("d4")
+        d5 = request.POST.get("d5")
+        d6 = request.POST.get("d6")
+        input_code = f"{d1}{d2}{d3}{d4}{d5}{d6}"
+        session_code = str(request.session.get("code"))
+
+        if not input_code:
+            return JsonResponse({"error":"kodni kiriting"}, status = 401)
+        if len(input_code) < 6:
+            return JsonResponse({"message":"parolni toliq kiriting"}, status = 401)
+
+        if input_code != session_code:
+            return JsonResponse({"error": "Kod notogri!"}, status=401)
+        
+        return redirect("update_password")
+
+class UpdatePassword(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(request, "new_pass.html")
+    
+    def post(self, request: HttpRequest) -> HttpResponse:
+        email = request.session.get("email")
+        if not email:
+            return JsonResponse({"message":"login not found"}, status = 401)
+        
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if not password:
+            return JsonResponse({"message":"password required"}, status=401)
+        if len(password) > 256:
+            return JsonResponse({"message":"max 256 characters"}, status=401)
+        if confirm_password != password:
+            return JsonResponse({"message":"passwords must match"}, status=401)
+        
+        user = Registration.objects.get(email=email)
+        user.password = make_password(password)
+        user.save()
+
+        for key in ["code", "email"]:
+            if key in request.session:
+                del request.session[key]
+
+        return redirect("login")
+        
+
+        
+        
+    
 
     
 class TableView(View):

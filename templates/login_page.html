@@ -74,7 +74,7 @@
         </div>
         <div>
             <input type="password" name="password" id="password" placeholder="Password" minlength="6" required>
-            <a style="color: dodgerblue; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 5px;" href="#">Forgot Password</a>
+            <a style="color: dodgerblue; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 5px;" href="{% url 'forgot_password' %}">Forgot Password</a>
         </div>
         <button class="loginBtn">Login</button>
         <a href="{% url 'register' %}" style="color: dodgerblue; display: inline-block; text-decoration: none; font-weight: 600; margin: auto; margin-top: -6px;">Sign Up</a>
