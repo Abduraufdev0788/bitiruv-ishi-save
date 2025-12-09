@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from random import randint
+from django.shortcuts import get_object_or_404
 
 from .models import Registration, Student
 
@@ -216,13 +217,10 @@ class UpdatePassword(View):
         if not password or password != confirm_password:
             return JsonResponse({"message": "Parollar mos emas yoki bo'sh"}, status=401)
 
-        try:
-            user = Registration.objects.get(email__iexact=email)
-            print(user)
-            user.set_password(password)          
-            user.save()
-        except Registration.DoesNotExist:
-            return JsonResponse({"message": "Foydalanuvchi topilmadi"}, status=404)
+        user = get_object_or_404(Registration, email=email)
+        user.password = make_password(password)
+        user.save()
+        print(user)
 
       
         for key in ["code", "email"]:
