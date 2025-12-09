@@ -308,4 +308,5 @@ class ListTableView(View):
         if years:
             students = students.filter(years__icontains=years)
         return render(request, "list_talbe.html", {"students": students})
+    print("salom")
     
