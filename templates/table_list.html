@@ -41,6 +41,25 @@
         .search-box input, .search-box select {
             border-radius: 8px;
         }
+
+        .cardBtns {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .cardClass, .listClass {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            flex: 1;
+            background: #198754;
+            color: white;
+        }
+        .cardClass:hover, .listClass:hover {
+            background: #157347;
+        }
     </style>
 </head>
 <body>
@@ -53,6 +72,7 @@
 
     <!-- 🔍 Qidiruv formasi -->
     <form method="GET" class="search-box mb-4">
+        {% csrf_token %}
         <div class="row g-3">
             <!-- Fakultet select dropdown -->
             <div class="col-md-3">
@@ -84,6 +104,11 @@
             </div>
         </div>
     </form>
+    
+    <div class="cardBtns">
+        <button  class='cardClass' onclick="window.location.href='{% url "table" %}'">Cards</button>
+        <button class='listClass' onclick="window.location.href='{% url "table-list" %}'">Jadval</button>
+    </div>
 
     {% if students %}
         <div class="row g-4">

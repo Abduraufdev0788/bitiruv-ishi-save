@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Login, Register, TableView, UpdatePassword, VerifyEmail, AddTableView, Kirish, Forgot_password, SendCode
+from .views import Login, Register, TableView, UpdatePassword, VerifyEmail, AddTableView, Kirish, Forgot_password, SendCode, ListTableView
 
 
 
@@ -12,5 +12,6 @@ urlpatterns = [
     path("update_password/", UpdatePassword.as_view(), name="update_password"),
     path("verify/", VerifyEmail.as_view(), name="verify"),
     path("table/", TableView.as_view(), name="table"),
+    path("list/", ListTableView.as_view(), name="table-list"),
     path("add_books/", AddTableView.as_view(), name="add_book")
 ]

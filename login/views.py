@@ -199,32 +199,34 @@ class SendCode(View):
         
         return redirect("update_password")
 
+
+
 class UpdatePassword(View):
-    def get(self, request: HttpRequest) -> HttpResponse:
+    def get(self, request):
         return render(request, "new_pass.html")
     
-    def post(self, request: HttpRequest) -> HttpResponse:
+    def post(self, request):
         email = request.session.get("email")
         if not email:
-            return JsonResponse({"message":"login not found"}, status = 401)
-        
+            return JsonResponse({"message": "Sessiya eskirgan"}, status=401)
+
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
 
-        if not password:
-            return JsonResponse({"message":"password required"}, status=401)
-        if len(password) > 256:
-            return JsonResponse({"message":"max 256 characters"}, status=401)
-        if confirm_password != password:
-            return JsonResponse({"message":"passwords must match"}, status=401)
-        
-        user = Registration.objects.get(email=email)
-        user.password = make_password(password)
-        user.save()
+        if not password or password != confirm_password:
+            return JsonResponse({"message": "Parollar mos emas yoki bo'sh"}, status=401)
 
+        try:
+            user = Registration.objects.get(email__iexact=email)
+            print(user)
+            user.set_password(password)          
+            user.save()
+        except Registration.DoesNotExist:
+            return JsonResponse({"message": "Foydalanuvchi topilmadi"}, status=404)
+
+      
         for key in ["code", "email"]:
-            if key in request.session:
-                del request.session[key]
+            request.session.pop(key, None)
 
         return redirect("login")
         
@@ -284,4 +286,28 @@ class AddTableView(View):
         )
 
         return redirect("table")
+    
+
+class ListTableView(View):
+    def get(self,request:HttpRequest)->HttpResponse:
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return JsonResponse({"message":"login not defound"})
+            
+        students = Student.objects.all().order_by('-id')
+
+        faculty = request.GET.get("faculty")
+        group_name = request.GET.get("group_name")
+        theme_name = request.GET.get("theme_name")
+        years = request.GET.get("years")
+
+        if faculty:
+            students = students.filter(faculty__icontains=faculty)
+        if group_name:
+            students = students.filter(group_name__icontains=group_name)
+        if theme_name:
+            students = students.filter(theme_name__icontains=theme_name)
+        if years:
+            students = students.filter(years__icontains=years)
+        return render(request, "list_talbe.html", {"students": students})
     
