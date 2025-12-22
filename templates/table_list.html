@@ -67,7 +67,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>🎓 Bitiruvchi ishlar ro‘yxati</h2>
-        <a href='{% url "add_book" %}' class="btn btn-primary">➕ Yangi ish qo‘shish</a>
+        <a href='{% url "table:add_book" %}' class="btn btn-primary">➕ Yangi ish qo‘shish</a>
     </div>
 
     <!-- 🔍 Qidiruv formasi -->
@@ -106,8 +106,8 @@
     </form>
     
     <div class="cardBtns">
-        <button  class='cardClass' onclick="window.location.href='{% url "table" %}'">Cards</button>
-        <button class='listClass' onclick="window.location.href='{% url "table-list" %}'">Jadval</button>
+        <button  class='cardClass' onclick="window.location.href='{% url "table:table" %}'">Cards</button>
+        <button class='listClass' onclick="window.location.href='{% url "table:table-list" %}'">Jadval</button>
     </div>
 
     {% if students %}

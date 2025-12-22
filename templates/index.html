@@ -374,8 +374,8 @@
                 <span>TATU</span>
             </a>
             <nav class="nav-buttons">
-                <button class="btn btn-login" onclick="window.location.href='{% url 'login' %}'">Kirish</button>
-                <button class="btn btn-signup" onclick="window.location.href='{% url 'register' %}'">Ro'yxatdan o'tish</button>
+                <button class="btn btn-login" onclick="window.location.href='{% url 'table:login' %}'">Kirish</button>
+                <button class="btn btn-signup" onclick="window.location.href='{% url 'table:register' %}'">Ro'yxatdan o'tish</button>
             </nav>
         </div>
     </header>
@@ -386,7 +386,7 @@
             <h1>Talaba Fayllari Tizimi</h1>
             <p>TATU Samarqand Filiali talabalarining barcha hujjatlarini xavfsiz va tartibli saqlash uchun zamonaviy platforma</p>
             <div class="hero-buttons">
-                <button class="btn-primary btn-primary-filled" onclick="window.location.href='{% url 'register' %}'">Boshlash</button>
+                <button class="btn-primary btn-primary-filled" onclick="window.location.href='{% url 'table:register' %}'">Boshlash</button>
                 <button class="btn-primary btn-primary-outline">Batafsil ma'lumot</button>
             </div>
         </div>
@@ -425,7 +425,7 @@
     <section class="cta">
         <h2>Hoziroq Boshlang</h2>
         <p>Bepul hisob ochib, talaba fayllariashini saqlashni boshlang</p>
-        <button class="btn-cta" onclick="window.location.href='{% url 'register' %}'">Ro'yxatdan O'tish</button>
+        <button class="btn-cta" onclick="window.location.href='{% url 'table:register' %}'">Ro'yxatdan O'tish</button>
     </section>
 
     <!-- Footer -->

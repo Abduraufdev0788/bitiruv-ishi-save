@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import Login, Register, TableView, UpdatePassword, VerifyEmail, AddTableView, Kirish, Forgot_password, SendCode, ListTableView
 
+app_name = "table"
 
 
 urlpatterns = [

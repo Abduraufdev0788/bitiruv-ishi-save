@@ -72,7 +72,7 @@ class Register(View):
         request.session['verification_code'] = verification_code
 
 
-        return redirect("verify")
+        return redirect("table:verify")
     
 
 class VerifyEmail(View):
@@ -112,7 +112,7 @@ class VerifyEmail(View):
             if key in request.session:
                 del request.session[key]
 
-        return redirect("table")
+        return redirect("home_page:home_page")
     
 
 class Login(View):
@@ -144,7 +144,7 @@ class Login(View):
 
         request.session['user_id'] = base_user.id
 
-        return redirect("table")
+        return redirect("home_page:home_page")
     
 
 
@@ -171,7 +171,7 @@ class Forgot_password(View):
         request.session['code'] = verification_code
         request.session['email'] = email
 
-        return redirect("sendcode")
+        return redirect("table:sendcode")
 
 class SendCode(View):
     def get(self, request: HttpRequest)->HttpResponse:
@@ -198,7 +198,7 @@ class SendCode(View):
         if input_code != session_code:
             return JsonResponse({"error": "Kod notogri!"}, status=401)
         
-        return redirect("update_password")
+        return redirect("table:update_password")
 
 
 
@@ -226,7 +226,7 @@ class UpdatePassword(View):
         for key in ["code", "email"]:
             request.session.pop(key, None)
 
-        return redirect("login")
+        return redirect("table:login")
         
 
         
@@ -237,6 +237,7 @@ class UpdatePassword(View):
 class TableView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         user_id = request.session.get('user_id')
+        print(user_id)
         if not user_id:
             return JsonResponse({"message":"login not defound"})
             
@@ -259,6 +260,9 @@ class TableView(View):
     
 class AddTableView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return JsonResponse({"message":"login not defound"})
         return render(request, "add_table.html")
     
     def post(self, request: HttpRequest) -> HttpResponse:
@@ -308,5 +312,4 @@ class ListTableView(View):
         if years:
             students = students.filter(years__icontains=years)
         return render(request, "list_talbe.html", {"students": students})
-    print("salom")
     
